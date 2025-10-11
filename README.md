@@ -5,7 +5,7 @@ A basic calculator
 ## System Reqriements
 Windows 10 or above
 #Chinese
-# Frogzen-Calculator
+## Frogzen-Calculator
 一款基礎計算器
 
 # 系統需求
