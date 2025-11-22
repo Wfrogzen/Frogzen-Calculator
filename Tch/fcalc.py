@@ -116,7 +116,7 @@ def ver():
     ver.geometry('320x260')
    
     verlabel = ttk.Label(ver)
-    verlabel.config(text='V1.0.1(繁體中文)', image=logo, font=tfont.Font(family='AppleGaramond', size=16), compound='top')
+    verlabel.config(text='V1.1(繁體中文)', image=logo, font=tfont.Font(family='AppleGaramond', size=16), compound='top')
     verlabel.place(anchor='center', x=160, y=100)
 
     verexit = ttk.Button(ver)
