@@ -6,13 +6,19 @@ import pyglet as pglt
 
 window = t.Tk()
 window.resizable(0,0)
-window.geometry('600x370')
+window.geometry('600x500')
 window.title('Frogzen Calculator')
 window.iconbitmap("./assets/icon.ico")
 
+# imports the fonts from ./font folder
+pglt.options['win32_gdi_font'] = True
+pglt.font.add_file('./fonts/AppleGaramond.ttf')
+AppleGaramond11 = tfont.Font(family="AllpeGaramond", size=11)
+AppleGaramond16 = tfont.Font(family="AllpeGaramond", size=16)
+
 # defines the style for buttons
 btstyle = ttk.Style()
-btstyle.configure(style="BW.TButton", foreground="black")
+btstyle.configure(style="BW.TButton", foreground="black", font=AppleGaramond11)
 
 # defines the calculation history
 history = list()
@@ -51,11 +57,6 @@ hr5v.set('')
 histrec5 = t.Label(window)
 histrec5.config(textvariable=hr5v)
 histrec5.place(anchor='center', x=545, y=250)
-
-# imports the fonts from ./font folder
-pglt.options['win32_gdi_font'] = True
-pglt.font.add_file('./fonts/AppleGaramond.ttf')
-# appleGaramond = font.Font(file='./fonts/AppleGaramond.ttf')
 
 # set the indicator value
 indicator_value = t.StringVar()
@@ -116,7 +117,7 @@ def ver():
     ver.geometry('320x260')
    
     verlabel = ttk.Label(ver)
-    verlabel.config(text='V1.1(English)', image=logo, font=tfont.Font(family='AppleGaramond', size=16), compound='top')
+    verlabel.config(text='V1.2-tr1(English)', image=logo, font=AppleGaramond16, compound='top')
     verlabel.place(anchor='center', x=160, y=100)
 
     verexit = ttk.Button(ver)
@@ -218,6 +219,12 @@ def append_divition():
         indicator_value.set(f'{indicator_value.get()}÷')
         status = 'num'
 
+def append_square():
+    global status
+    if status == 'symbol':
+        indicator_value.set(f'{indicator_value.get()}²')
+        status = 'num'
+
 def appendLB():
     indicator_value.set(f'{indicator_value.get()}(')
 
@@ -248,6 +255,7 @@ def calculate():
     result = indicator_value.get()
     result = result.replace('×','*')
     result = result.replace('÷','/')
+    result = result.replace('²','**2')
     try:
         indicator_value.set(eval(result))
     except ZeroDivisionError:
@@ -372,5 +380,9 @@ buttonDP.place(anchor='center', x=435, y=228)
 button_pos2Neg = ttk.Button(window)
 button_pos2Neg.config(text='\n(-\n', width=12, command=pos2Neg, style="BW.TButton")
 button_pos2Neg.place(anchor='center', x=435, y=293)
+
+button_square = ttk.Button(window)
+button_square.config(text='\n²\n', width=12, command=append_square, style="BW.TButton" )
+button_square.place(anchor='center', x=55, y=358)
 
 window.mainloop()
