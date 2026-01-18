@@ -8,7 +8,7 @@ window = t.Tk()
 window.resizable(0,0)
 window.geometry('600x500')
 window.title('Frogzen Calculator')
-window.iconbitmap("./assets/icon.ico")
+window.iconbitmap("./assets/icon.ico") 
 
 # imports the fonts from ./font folder
 pglt.options['win32_gdi_font'] = True
