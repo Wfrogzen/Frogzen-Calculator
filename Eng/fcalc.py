@@ -3,12 +3,13 @@ from tkinter import ttk
 from tkinter import messagebox as tmb
 import tkinter.font as tfont
 import pyglet as pglt
+import platform 
 
 window = t.Tk()
 window.resizable(0,0)
-window.geometry('600x500')
+window.geometry('600x480')
 window.title('Frogzen Calculator')
-window.iconbitmap("./assets/icon.ico") 
+window.iconbitmap("./assets/icon.ico")
 
 # imports the fonts from ./font folder
 pglt.options['win32_gdi_font'] = True
@@ -16,9 +17,13 @@ pglt.font.add_file('./fonts/AppleGaramond.ttf')
 AppleGaramond11 = tfont.Font(family="AllpeGaramond", size=11)
 AppleGaramond16 = tfont.Font(family="AllpeGaramond", size=16)
 
-# defines the style for buttons
+# defines the style for main buttons
 btstyle = ttk.Style()
 btstyle.configure(style="BW.TButton", foreground="black", font=AppleGaramond11)
+if platform.system() == "Windows":
+    btstyle.theme_use("vista")
+elif platform.system == "Darwin":
+    btstyle.theme_use("aqua")
 
 # defines the calculation history
 history = list()
@@ -109,6 +114,7 @@ def clear_mem():
     global memory
     memory = 0
 
+# The version window
 def ver():
     ver = t.Toplevel()
     ver.resizable(0,0)
@@ -117,7 +123,7 @@ def ver():
     ver.geometry('320x260')
    
     verlabel = ttk.Label(ver)
-    verlabel.config(text='V1.2-tr1(English)', image=logo, font=AppleGaramond16, compound='top')
+    verlabel.config(text='V1.2-tr2(English)', image=logo, font=AppleGaramond16, compound='top')
     verlabel.place(anchor='center', x=160, y=100)
 
     verexit = ttk.Button(ver)
@@ -140,90 +146,6 @@ menubar.add_cascade(label='Settings', menu=settings_menu)
 window.config(menu=menubar)
 
 # function that controls the indicator
-def append1():
-    global status
-    indicator_value.set(f'{indicator_value.get()}1')
-    status = 'symbol'
-
-def append2():
-    global status
-    indicator_value.set(f'{indicator_value.get()}2')
-    status = 'symbol'
-
-def append3():
-    global status
-    indicator_value.set(f'{indicator_value.get()}3')
-    status = 'symbol'
-
-def append4():
-    global status
-    indicator_value.set(f'{indicator_value.get()}4')
-    status = 'symbol'
-
-def append5():
-    global status
-    indicator_value.set(f'{indicator_value.get()}5')
-    status = 'symbol'
-
-def append6():
-    global status
-    indicator_value.set(f'{indicator_value.get()}6')
-    status = 'symbol'
-
-def append7():
-    global status
-    indicator_value.set(f'{indicator_value.get()}7')
-    status = 'symbol'
-
-def append8():
-    global status
-    indicator_value.set(f'{indicator_value.get()}8')
-    status = 'symbol'
-
-def append9():
-    global status
-    indicator_value.set(f'{indicator_value.get()}9')
-    status = 'symbol'
-
-def append0():
-    global status
-    indicator_value.set(f'{indicator_value.get()}0')
-    status = 'symbol'
-
-def append_decimalPoint():
-    global status
-    indicator_value.set(f'{indicator_value.get()}.')
-    status = 'symbol'
-
-def append_plus():
-    global status
-    if status == 'symbol':
-        indicator_value.set(f'{indicator_value.get()}+')
-        status = 'num'
-
-def append_minus():
-    global status
-    if status == 'symbol':
-        indicator_value.set(f'{indicator_value.get()}-')
-        status = 'num'
-
-def append_mutiplication():
-    global status
-    if status == 'symbol':
-        indicator_value.set(f'{indicator_value.get()}×')
-        status = 'num'
-
-def append_divition():
-    global status
-    if status == 'symbol':
-        indicator_value.set(f'{indicator_value.get()}÷')
-        status = 'num'
-
-def append_square():
-    global status
-    if status == 'symbol':
-        indicator_value.set(f'{indicator_value.get()}²')
-        status = 'num'
 
 def appendLB():
     indicator_value.set(f'{indicator_value.get()}(')
@@ -239,6 +161,16 @@ def pos2Neg():
     if isNeg == False:
         indicator_value.set(f'{indicator_value.get()}(-')
         isNeg = True
+
+def appendChar(val: str, charType: str, ):
+    global status
+    
+    if charType == 'Num':
+        indicator_value.set(f'{indicator_value.get()}{val}')
+        status = 'symbol'
+    elif charType == "Sym" and status == 'symbol':
+        indicator_value.set(f'{indicator_value.get()}{val}')
+        status = 'num'
 
 def clear():
     indicator_value.set('')
@@ -294,95 +226,101 @@ indicator.config(textvariable=indicator_value, height=2, width=62,  \
                 bd=3, relief='solid')
 indicator.place(anchor='center', x=240, y=33)
 
+# create the frame for helding the main buttons
+mainFrame = t.Frame(window)
+mainFrame.config(height=242, width=500)
+mainFrame.place(anchor='center', x=260, y=300)
+
+
 # create the buttons
-button1 = ttk.Button(window)
-button1.config(text='\n1\n', width=12, command=append1, style="BW.TButton")
-button1.place(anchor='center', x=55, y=98)
+button1 = ttk.Button(mainFrame)
+button1.config(text='\n1\n', width=12, command=lambda val='1' ,charType = 'Num': appendChar(val, charType), style="BW.TButton")
+button1.place(anchor='center', x=50, y=30)
 
-button2 = ttk.Button(window)
-button2.config(text='\n2\n', width=12, command=append2, style="BW.TButton")
-button2.place(anchor='center', x=150, y=98)
+button2 = ttk.Button(mainFrame)
+button2.config(text='\n2\n', width=12, command=lambda val='2' ,charType = 'Num': appendChar(val, charType), style="BW.TButton")
+button2.place(anchor='center', x=150, y=30)
 
-button3 = ttk.Button(window)
-button3.config(text='\n3\n', width=12, command=append3, style="BW.TButton")
-button3.place(anchor='center', x=245, y=98)
-
-
-button4 = ttk.Button(window)
-button4.config(text='\n4\n', width=12, command=append4, style="BW.TButton")
-button4.place(anchor='center', x=55, y=163)
-
-button5 = ttk.Button(window)
-button5.config(text='\n5\n', width=12, command=append5, style="BW.TButton")
-button5.place(anchor='center', x=150, y=163)
-
-button6 = ttk.Button(window)
-button6.config(text='\n6\n', width=12, command=append6, style="BW.TButton")
-button6.place(anchor='center', x=245, y=163)
+button3 = ttk.Button(mainFrame)
+button3.config(text='\n3\n', width=12, command=lambda val='3' ,charType = 'Num': appendChar(val, charType), style="BW.TButton")
+button3.place(anchor='center', x=250, y=30)
 
 
-button7 = ttk.Button(window)
-button7.config(text='\n7\n', width=12, command=append7, style="BW.TButton")
-button7.place(anchor='center', x=55, y=228)
+button4 = ttk.Button(mainFrame)
+button4.config(text='\n4\n', width=12, command=lambda val='4' ,charType = 'Num': appendChar(val, charType), style="BW.TButton")
+button4.place(anchor='center', x=50, y=90)
 
-button8 = ttk.Button(window)
-button8.config(text='\n8\n', width=12, command=append8, style="BW.TButton")
-button8.place(anchor='center', x=150, y=228)
+button5 = ttk.Button(mainFrame)
+button5.config(text='\n5\n', width=12, command=lambda val='5' ,charType = 'Num': appendChar(val, charType), style="BW.TButton")
+button5.place(anchor='center', x=150, y=90)
 
-button9 = ttk.Button(window)
-button9.config(text='\n9\n', width=12, command=append9, style="BW.TButton")
-button9.place(anchor='center', x=245, y=228)
+button6 = ttk.Button(mainFrame)
+button6.config(text='\n6\n', width=12, command=lambda val='6' ,charType = 'Num': appendChar(val, charType), style="BW.TButton")
+button6.place(anchor='center', x=250, y=90)
 
-button0 = ttk.Button(window)
-button0.config(text='\n0\n', width=12, command=append0, style="BW.TButton")
-button0.place(anchor='center', x=150, y=293)
 
-buttonLB = ttk.Button(window)
+button7 = ttk.Button(mainFrame)
+button7.config(text='\n7\n', width=12, command=lambda val='7' ,charType = 'Num': appendChar(val, charType), style="BW.TButton")
+button7.place(anchor='center', x=50, y=150)
+
+button8 = ttk.Button(mainFrame)
+button8.config(text='\n8\n', width=12, command=lambda val='8' ,charType = 'Num': appendChar(val, charType), style="BW.TButton")
+button8.place(anchor='center', x=150, y=150)
+
+button9 = ttk.Button(mainFrame)
+button9.config(text='\n9\n', width=12, command=lambda val='9' ,charType = 'Num': appendChar(val, charType), style="BW.TButton")
+button9.place(anchor='center', x=250, y=150)
+
+button0 = ttk.Button(mainFrame)
+button0.config(text='\n0\n', width=12, command=lambda val='0' ,charType = 'Num': appendChar(val, charType), style="BW.TButton")
+button0.place(anchor='center', x=150, y=210)
+
+buttonLB = ttk.Button(mainFrame)
 buttonLB.config(text='\n(\n', width=5, command=appendLB, style="BW.TButton")
-buttonLB.place(anchor='center', x=32, y=293)
+buttonLB.place(anchor='center', x=25, y=210)
 
-buttonRB = ttk.Button(window)
+buttonRB = ttk.Button(mainFrame)
 buttonRB.config(text='\n)\n', width=5, command=appendRB, style="BW.TButton")
-buttonRB.place(anchor='center', x=78, y=293)
+buttonRB.place(anchor='center', x=75, y=210)
 
-buttonAC = ttk.Button(window)
+buttonAC = ttk.Button(mainFrame)
 buttonAC.config(text='\nAC\n', width=12, command=clear, style="BW.TButton")
-buttonAC.place(anchor='center', x=435, y=98)
+buttonAC.place(anchor='center', x=450, y=30)
 
-buttonC = ttk.Button(window)
+buttonC = ttk.Button(mainFrame)
 buttonC.config(text='\nC\n', width=12, command=delete, style="BW.TButton")
-buttonC.place(anchor='center', x=435, y=163)
+buttonC.place(anchor='center', x=450, y=90)
 
-button_equal = ttk.Button(window)
+button_equal = ttk.Button(mainFrame)
 button_equal.config(text='\n=\n', width=12, command=calculate, style="BW.TButton")
-button_equal.place(anchor='center', x=245, y=293)
+button_equal.place(anchor='center', x=250, y=210)
 
-button_plus = ttk.Button(window)
-button_plus.config(text='\n+\n', width=12, command=append_plus, style="BW.TButton")
-button_plus.place(anchor='center', x=340, y=98)
+button_plus = ttk.Button(mainFrame)
+button_plus.config(text='\n+\n', width=12, command=lambda val='+', charType = "Sym": appendChar(val, charType), style="BW.TButton")
+button_plus.place(anchor='center', x=350, y=30)
 
-button_minus = ttk.Button(window)
-button_minus.config(text='\n-\n', width=12, command=append_minus, style="BW.TButton")
-button_minus.place(anchor='center', x=340, y=163)
+button_minus = ttk.Button(mainFrame)
+button_minus.config(text='\n-\n', width=12, command=lambda val='-', charType = "Sym": appendChar(val, charType), style="BW.TButton")
+button_minus.place(anchor='center', x=350, y=90)
 
-button_mutipliation = ttk.Button(window)
-button_mutipliation.config(text='\n×\n', width=12, command=append_mutiplication, style="BW.TButton")
-button_mutipliation.place(anchor='center', x=340, y=228)
+button_mutipliation = ttk.Button(mainFrame)
+button_mutipliation.config(text='\n×\n', width=12, command=lambda val='×', charType = "Sym": appendChar(val, charType), style="BW.TButton")
+button_mutipliation.place(anchor='center', x=350, y=150)
 
-button_divition = ttk.Button(window)
-button_divition.config(text='\n÷\n', width=12, command=append_divition, style="BW.TButton")
-button_divition.place(anchor='center', x=340, y=293)
+button_divition = ttk.Button(mainFrame)
+button_divition.config(text='\n÷\n', width=12, command=lambda val='÷', charType = "Sym": appendChar(val, charType), style="BW.TButton")
+button_divition.place(anchor='center', x=350, y=210)
 
-buttonDP = ttk.Button(window)
-buttonDP.config(text='\n.\n', width=12, command=append_decimalPoint, style="BW.TButton")
-buttonDP.place(anchor='center', x=435, y=228)
+buttonDP = ttk.Button(mainFrame)
+buttonDP.config(text='\n.\n', width=12, command=lambda val='.' ,charType = 'Num': appendChar(val, charType), style="BW.TButton")
+buttonDP.place(anchor='center', x=450, y=150)
 
-button_pos2Neg = ttk.Button(window)
+button_pos2Neg = ttk.Button(mainFrame)
 button_pos2Neg.config(text='\n(-\n', width=12, command=pos2Neg, style="BW.TButton")
-button_pos2Neg.place(anchor='center', x=435, y=293)
+button_pos2Neg.place(anchor='center', x=450, y=210)
 
 button_square = ttk.Button(window)
-button_square.config(text='\n²\n', width=12, command=append_square, style="BW.TButton" )
-button_square.place(anchor='center', x=55, y=358)
+button_square.config(text='²', width=8, command=lambda val='²', charType = "Num": appendChar(val, charType), style="BW.TButton" )
+button_square.place(anchor='center', x=55, y=98)
 
 window.mainloop()
