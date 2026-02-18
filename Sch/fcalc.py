@@ -28,8 +28,8 @@ elif platform.system() == "Linux":
 # imports the fonts from ./font folder
 pglt.options['win32_gdi_font'] = True
 pglt.font.add_file('./fonts/AppleGaramond.ttf')
-AppleGaramond11 = tfont.Font(family="AppleGaramond", size=11)
-AppleGaramond16 = tfont.Font(family="AppleGaramond", size=16)
+AppleGaramond11 = tfont.Font(family="AllpeGaramond", size=11)
+AppleGaramond16 = tfont.Font(family="AllpeGaramond", size=16)
 
 # defines the style for main buttons
 btstyle = ttkt.ThemedStyle()
@@ -71,7 +71,8 @@ def mem_plus():
                 memory += float(indicator_value.get())
             except ValueError:
                 indicator_value.set('')
-                tmb.showwarning(title='error', message='Please give the memory a number')
+                tmb.showwarning(title='故障', message='记忆为空')
+
 
 def mem_minus():
     try:
@@ -82,7 +83,7 @@ def mem_minus():
                 memory -= float(indicator_value.get())
             except ValueError:
                 indicator_value.set('')
-                tmb.showwarning(title='error', message='Please give the memory a number')
+                tmb.showwarning(title='故障', message='记忆为空')
 
 def get_mem():
     global status
@@ -101,23 +102,23 @@ def ver():
     ver = t.Toplevel()
     ver.configure(background=btstyle.lookup("TFrame", "background"))
     ver.resizable(0,0)
-    ver.title('About')
+    ver.title('关于')
     ver.iconphoto(False, *icons)
     ver.geometry('320x260')
    
     verlabel = ttk.Label(ver)
-    verlabel.config(text='V1.2-Alpha1(English)', image=logo, font=AppleGaramond16, compound='top')
+    verlabel.config(text='V1.2-Alpha1(简体中文)', image=logo, font=tfont.Font(family='AppleGaramond', size=16), compound='top')
     verlabel.place(anchor='center', x=160, y=100)
 
     verexit = ttk.Button(ver)
-    verexit.config(text='Got it!', style='BW.TButton', command=ver.destroy)
+    verexit.config(text='确定', style='BW.TButton', command=ver.destroy)
     verexit.place(anchor='center', x=160, y=160)
 
 def historyWin():
     histWin = t.Toplevel()
     histWin.configure(background=btstyle.lookup("TFrame", "background"))
     histWin.resizable(0,0)
-    histWin.title('Calculation history')
+    histWin.title('计算历史')
     histWin.iconphoto(False, *icons)
     histWin.geometry('400x600')
 
@@ -166,16 +167,16 @@ memory_menu.add_command(label="M+", command=mem_plus)
 memory_menu.add_command(label="M-", command=mem_minus)
 memory_menu.add_command(label="MR", command=get_mem)
 memory_menu.add_command(label="MC", command=clear_mem)
-menubar.add_cascade(label="Memory", menu=memory_menu)
+menubar.add_cascade(label="记忆", menu=memory_menu)
 
 settings_menu = t.Menu(menubar, tearoff=0)
 settings_menu.configure(background=bg_color, foreground=fg_color, activebackground=active_bg, activeforeground=active_fg,
     disabledforeground=dis_fg, font=AppleGaramond11, borderwidth=1, activeborderwidth=0)
 
-settings_menu.add_command(label='Version', command=ver)
-settings_menu.add_command(label="Exit", command=window.quit)
+settings_menu.add_command(label='版本', command=ver)
+settings_menu.add_command(label="退出", command=window.quit)
 
-menubar.add_cascade(label='Settings', menu=settings_menu)
+menubar.add_cascade(label='设定', menu=settings_menu)
 window.config(menu=menubar)
 
 # function that controls the indicator
@@ -231,11 +232,11 @@ def calculate():
         indicator_value.set(eval(result))
     except ZeroDivisionError:
         indicator_value.set('')
-        tmb.showwarning(title='error', message='Cannot divide a number by zero')
+        tmb.showwarning(title='故障', message='不能除以零')
         DoErrorAppear = True
     except SyntaxError:
         indicator_value.set('')
-        tmb.showwarning(title='error', message='There are syntax error(s)')
+        tmb.showwarning(title='故障', message='格式不正确')
         DoErrorAppear = True
     result = indicator_value.get()
     if result[(len(result) - 2):] == '.0' :
@@ -248,7 +249,7 @@ def calculate():
     if DoErrorAppear == False:
         global history
         history.append(result)
-    
+
 # create the indicator
 indicator = t.Label(window)
 indicator.config(textvariable=indicator_value, height=2, width=60,  \
