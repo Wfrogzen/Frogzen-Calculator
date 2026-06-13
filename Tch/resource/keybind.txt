@@ -1,0 +1,16 @@
+Button   Key
+-------- ------------
+0-9      0-9
++        Shift =   +
+-        -
+×        Shift 8   *
+÷        /
+(        Shift 9   (
+)        Shift 0   )
+=        = or Enter
+²        Shift 2   @
+³        Shift 3   #
+^        Shift 6   ^
+√        Shift Q
+DEL      Backspace ⌫
+AC       Delete

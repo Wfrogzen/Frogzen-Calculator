@@ -5,13 +5,24 @@ import tkinter.font as tfont
 import ttkthemes as ttkt
 from math import sqrt
 import pyglet as pglt
-import platform 
+from platform import system
 import os
+from sys import version_info
+
+# defines the current software version (need to be constantly changed every time version number changes)
+verMajor = 1
+verMinor = 2
+verPatch = 0
+verAttr = "Beta1"
+
+sqrt(1)
+
+# setting the locale dictionary
 
 window = t.Tk()
 window.resizable(0,0)
 window.geometry('550x500')
-window.title('Frogzen Calculator')
+window.title("Frogzen Calculator")
 icon_files = ['./assets/icon-1.png', './assets/icon-2.png', './assets/icon-3.png', \
               './assets/icon-4.png','./assets/icon-5.png',]
 icons = []
@@ -20,25 +31,25 @@ for path in icon_files:
         icons.append(t.PhotoImage(file=path))
 window.iconphoto(False, *icons)
 
-if platform.system() == "Windows":
+if system() == "Windows":
     currButtonWidth = 12
-elif platform.system() == "Linux":
+elif system() == "Linux":
     currButtonWidth = 10
 
 # imports the fonts from ./font folder
 pglt.options['win32_gdi_font'] = True
 pglt.font.add_file('./fonts/AppleGaramond.ttf')
-AppleGaramond11 = tfont.Font(family="AllpeGaramond", size=11)
-AppleGaramond16 = tfont.Font(family="AllpeGaramond", size=16)
+AppleGaramond11 = tfont.Font(family="AppleGaramond", size=11)
+AppleGaramond16 = tfont.Font(family="AppleGaramond", size=16)
 
 # defines the style for main buttons
 btstyle = ttkt.ThemedStyle()
 btstyle.configure(style="BW.TButton", foreground="black")
-if platform.system() == "Windows":
+if system() == "Windows":
     btstyle.set_theme("vista")
-elif platform.system() == "Darwin":
+elif system() == "Darwin":
     btstyle.set_theme("aqua")
-elif platform.system() == "Linux":
+elif system() == "Linux":
     btstyle.set_theme("adapta")
 window.configure(background=btstyle.lookup("TFrame", "background"))
 
@@ -56,10 +67,10 @@ isNeg = False
 #define the logo
 logo = t.PhotoImage(file='./assets/logo.png')
 
-# memory var declation
+# memory var declaration
 memory = 0
 
-def doNotThing():
+def doNothing():
     tmb.showinfo(title='Secret window', message='Oh! You just discover a hidden window!')
 
 def mem_plus():
@@ -98,26 +109,31 @@ def clear_mem():
 
 # The version window
 def ver():
-    ver = t.Toplevel()
-    ver.configure(background=btstyle.lookup("TFrame", "background"))
-    ver.resizable(0,0)
-    ver.title('關於')
-    ver.iconphoto(False, *icons)
-    ver.geometry('320x260')
-   
-    verlabel = ttk.Label(ver)
-    verlabel.config(text='V1.2-Alpha1(繁體中文)', image=logo, font=tfont.Font(family='AppleGaramond', size=16), compound='top')
+    verWin = t.Toplevel()
+    verWin.configure(background=btstyle.lookup("TFrame", "background"))
+    verWin.resizable(False,False)
+    verWin.title("關於")
+    verWin.iconphoto(False, *icons)
+    verWin.geometry('320x260')
+    
+    verlabel = ttk.Label(verWin)
+    verlabel.config(text=f'V{verMajor}.{verMinor}.{verPatch}-{verAttr}(繁體中文)', image=logo, font=AppleGaramond16, compound='top')
     verlabel.place(anchor='center', x=160, y=100)
 
-    verexit = ttk.Button(ver)
-    verexit.config(text='確定', style='BW.TButton', command=ver.destroy)
-    verexit.place(anchor='center', x=160, y=160)
+    pyverlabel = ttk.Label(verWin)
+    pyverlabel.config(text=f'Python {version_info[0]}.{version_info[1]}.{version_info[2]} 在 {system()} 上' \
+                      ,font=AppleGaramond11)        # version_info[0] is major, version_info[1] is minor, version_info[2] is patch
+    pyverlabel.place(anchor='center', x=160, y=150)
+
+    verexit = ttk.Button(verWin)
+    verexit.config(text='明白了！', style='BW.TButton', command=verWin.destroy)
+    verexit.place(anchor='center', x=160, y=200)
 
 def historyWin():
     histWin = t.Toplevel()
     histWin.configure(background=btstyle.lookup("TFrame", "background"))
-    histWin.resizable(0,0)
-    histWin.title('計算歷史')
+    histWin.resizable(False,False)
+    histWin.title("計算歷史")
     histWin.iconphoto(False, *icons)
     histWin.geometry('400x600')
 
@@ -137,15 +153,32 @@ def historyWin():
             i += 1
     else:
         histrec = ttk.Label(histWin)
-        histrec.config(text='No history', font=AppleGaramond11)
+        histrec.config(text="No history", font=AppleGaramond11)
         histrec.place(anchor='center', x=200, y=50 + 30 * i)
 
     history.reverse()
-    
+
+def keyMapWin():
+    keyMapWindow = t.Toplevel()
+    keyMapWindow.configure(background=btstyle.lookup("TFrame", "background"))
+    keyMapWindow.resizable(False,False)
+    keyMapWindow.iconphoto(False, *icons)
+    keyMapWindow.geometry("400x500")
+
+    keyMapLabel = ttk.Label(keyMapWindow)
+    with open("./resource/keybind.txt", "r", encoding="utf-8") as keyBindText:
+        i = 0
+        keybind = ""
+        for lines in keyBindText.readlines():
+            keybind = f"{keybind}{lines}"
+
+    keyMapLabel.config(text=keybind, font=AppleGaramond16)
+    keyMapLabel.place(anchor='center', x=200, y=250)
+
 # defines the button to history window
 hist = ttk.Button(window)
-hist.config(text='History', style="BW.TButton", command=historyWin)
-hist.place(anchor='center', x=460, y=95)
+hist.config(text='計算歷史', style="BW.TButton", command=historyWin)
+hist.place(anchor='center', x=460, y=98)
 
 bg_color = btstyle.lookup("TFrame", "background")
 fg_color = btstyle.lookup("TLabel", "foreground")
@@ -168,14 +201,15 @@ memory_menu.add_command(label="MR", command=get_mem)
 memory_menu.add_command(label="MC", command=clear_mem)
 menubar.add_cascade(label="記憶", menu=memory_menu)
 
-settings_menu = t.Menu(menubar, tearoff=0)
-settings_menu.configure(background=bg_color, foreground=fg_color, activebackground=active_bg, activeforeground=active_fg,
+help_menu = t.Menu(menubar, tearoff=0)
+help_menu.configure(background=bg_color, foreground=fg_color, activebackground=active_bg, activeforeground=active_fg,
     disabledforeground=dis_fg, font=AppleGaramond11, borderwidth=1, activeborderwidth=0)
 
-settings_menu.add_command(label='版本', command=ver)
-settings_menu.add_command(label="退出", command=window.quit)
+help_menu.add_command(label='版本', command=ver)
+help_menu.add_command(label='键盘快捷键', command=keyMapWin)
+help_menu.add_command(label="退出", command=window.quit)
 
-menubar.add_cascade(label='設定', menu=settings_menu)
+menubar.add_cascade(label="帮助", menu=help_menu)
 window.config(menu=menubar)
 
 # function that controls the indicator
@@ -191,7 +225,7 @@ def appendRB():
 
 def pos2Neg():
     global isNeg
-    if isNeg == False:
+    if not isNeg:
         indicator_value.set(f'{indicator_value.get()}(-')
         isNeg = True
 
@@ -245,17 +279,17 @@ def calculate():
     elif '.' in result:
         indicator_value.set(result[:(len(result) - 6)])
 
-    if DoErrorAppear == False:
+    if not DoErrorAppear:
         global history
         history.append(result)
-
+    
 # create the indicator
 indicator = t.Label(window)
 indicator.config(textvariable=indicator_value, height=2, width=60,  \
                 bd=3, relief='solid')
 indicator.place(anchor='center', x=275, y=33)
 
-# create the frame for helding the main buttons
+# create the frame for holding the main buttons
 mainFrame = t.Frame(window)
 mainFrame.config(height=320, width=550, bg=btstyle.lookup("TFrame", "background"))
 mainFrame.place(anchor='center', x=280,  y=300)
@@ -284,16 +318,16 @@ window.bind('<plus>', lambda p, val='+' ,charType = 'Sym': appendChar(val, charT
 window.bind('<minus>', lambda p, val='-' ,charType = 'Sym': appendChar(val, charType))
 window.bind('<asterisk>', lambda p, val='×' ,charType = 'Sym': appendChar(val, charType))
 window.bind('<slash>', lambda p, val='÷' ,charType = 'Sym': appendChar(val, charType))
-window.bind('<=>', lambda p: calculate())
+window.bind('<equal>', lambda p: calculate())
 window.bind('<Return>', lambda p: calculate())
 
 window.bind('<period>', lambda p, val='.' ,charType = 'Num': appendChar(val, charType))
 
-window.bind('<Shift-S>', lambda p, val='²', charType = "Num": appendChar(val, charType))
-window.bind('<Shift-C>', lambda p, val='³', charType = "Num": appendChar(val, charType))
+window.bind('<Shift-at>', lambda p, val='²', charType = "Num": appendChar(val, charType)) # Shift + 2
+window.bind('<Shift-numbersign>', lambda p, val='³', charType = "Num": appendChar(val, charType)) # Shift + 3
 window.bind('<Shift-Q>', lambda p: appendSqrt())
 
-window.bind('<asciicircum>', lambda p, val='^' ,charType = 'Sym': appendChar(val, charType))
+window.bind('<Shift-asciicircum>', lambda p, val='^' ,charType = 'Sym': appendChar(val, charType)) # Shift + 6
 
 # create the buttons
 button1 = ttk.Button(mainFrame)
@@ -350,9 +384,9 @@ buttonAC = ttk.Button(mainFrame)
 buttonAC.config(text='\nAC\n', width=currButtonWidth, command=clear, style="BW.TButton")
 buttonAC.place(anchor='center', x=490, y=30)
 
-buttonC = ttk.Button(mainFrame)
-buttonC.config(text='\nC\n', width=currButtonWidth, command=delete, style="BW.TButton")
-buttonC.place(anchor='center', x=490, y=110)
+buttonDEL = ttk.Button(mainFrame)
+buttonDEL.config(text='\nDEL\n', width=currButtonWidth, command=delete, style="BW.TButton")
+buttonDEL.place(anchor='center', x=490, y=110)
 
 button_equal = ttk.Button(mainFrame)
 button_equal.config(text='\n=\n', width=currButtonWidth, command=calculate, style="BW.TButton")
@@ -366,13 +400,13 @@ button_minus = ttk.Button(mainFrame)
 button_minus.config(text='\n-\n', width=currButtonWidth, command=lambda val='-', charType = "Sym": appendChar(val, charType), style="BW.TButton")
 button_minus.place(anchor='center', x=380, y=110)
 
-button_mutipliation = ttk.Button(mainFrame)
-button_mutipliation.config(text='\n×\n', width=currButtonWidth, command=lambda val='×', charType = "Sym": appendChar(val, charType), style="BW.TButton")
-button_mutipliation.place(anchor='center', x=380, y=190)
+button_multiplication = ttk.Button(mainFrame)
+button_multiplication.config(text='\n×\n', width=currButtonWidth, command=lambda val='×', charType ="Sym": appendChar(val, charType), style="BW.TButton")
+button_multiplication.place(anchor='center', x=380, y=190)
 
-button_divition = ttk.Button(mainFrame)
-button_divition.config(text='\n÷\n', width=currButtonWidth, command=lambda val='÷', charType = "Sym": appendChar(val, charType), style="BW.TButton")
-button_divition.place(anchor='center', x=380, y=270)
+button_division = ttk.Button(mainFrame)
+button_division.config(text='\n÷\n', width=currButtonWidth, command=lambda val='÷', charType ="Sym": appendChar(val, charType), style="BW.TButton")
+button_division.place(anchor='center', x=380, y=270)
 
 buttonDP = ttk.Button(mainFrame)
 buttonDP.config(text='\n.\n', width=currButtonWidth, command=lambda val='.' ,charType = 'Num': appendChar(val, charType), style="BW.TButton")
