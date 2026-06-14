@@ -1,10 +1,6 @@
 import os
 import sys
 from platform import system
-# This environment flag MUST be set before pyglet is imported
-if system() == "Linux":
-    os.environ["PYGLET_HEADLESS"] = "1"
-import pyglet as pglt
 import tkinter as t
 from tkinter import ttk
 from tkinter import messagebox as tmb
@@ -39,12 +35,6 @@ if system() == "Windows":
     currButtonWidth = 12
 elif system() == "Linux":
     currButtonWidth = 10
-
-# imports the fonts from ./font folder
-pglt.options['win32_gdi_font'] = True
-pglt.font.add_file('./fonts/AppleGaramond.ttf')
-AppleGaramond11 = tfont.Font(family="AppleGaramond", size=11)
-AppleGaramond16 = tfont.Font(family="AppleGaramond", size=16)
 
 # defines the style for main buttons
 btstyle = ttkt.ThemedStyle()
@@ -121,12 +111,11 @@ def ver():
     verWin.geometry('320x260')
     
     verlabel = ttk.Label(verWin)
-    verlabel.config(text=f'V{verMajor}.{verMinor}.{verPatch}-{verAttr}(English)', image=logo, font=AppleGaramond16, compound='top')
+    verlabel.config(text=f'V{verMajor}.{verMinor}.{verPatch}-{verAttr}(English)', image=logo, compound='top')
     verlabel.place(anchor='center', x=160, y=100)
 
     pyverlabel = ttk.Label(verWin)
-    pyverlabel.config(text=f'Python {version_info[0]}.{version_info[1]}.{version_info[2]} on {system()}' \
-                      ,font=AppleGaramond11)        # version_info[0] is major, version_info[1] is minor, version_info[2] is patch
+    pyverlabel.config(text=f'Python {version_info[0]}.{version_info[1]}.{version_info[2]} on {system()}')        # version_info[0] is major, version_info[1] is minor, version_info[2] is patch
     pyverlabel.place(anchor='center', x=160, y=150)
 
     verexit = ttk.Button(verWin)
@@ -149,7 +138,7 @@ def historyWin():
         for results in history:
             print(results)
             histrec = ttk.Label(histWin)
-            histrec.config(text=f'{i+1}. {results}', font=AppleGaramond11)
+            histrec.config(text=f'{i+1}. {results}')
             histrec.place(anchor='center', x=200, y=12 + 25 * i)
             if i == 23 :
                 break
@@ -157,7 +146,7 @@ def historyWin():
             i += 1
     else:
         histrec = ttk.Label(histWin)
-        histrec.config(text="No history", font=AppleGaramond11)
+        histrec.config(text="No history")
         histrec.place(anchor='center', x=200, y=50 + 30 * i)
 
     history.reverse()
@@ -176,7 +165,7 @@ def keyMapWin():
         for lines in keyBindText.readlines():
             keybind = f"{keybind}{lines}"
 
-    keyMapLabel.config(text=keybind, font=AppleGaramond16)
+    keyMapLabel.config(text=keybind)
     keyMapLabel.place(anchor='center', x=200, y=250)
 
 # defines the button to history window
@@ -193,11 +182,11 @@ dis_fg = btstyle.lookup("TEntry", "foreground", ["disabled"])
 # menubar and menu code
 menubar = t.Menu(window)
 menubar.configure(background=bg_color, foreground=fg_color, activebackground=active_bg, activeforeground=active_fg, \
-    font=AppleGaramond11, borderwidth=0, activeborderwidth=0) 
+    borderwidth=0, activeborderwidth=0) 
 
 memory_menu = t.Menu(menubar, tearoff=0)
 memory_menu.configure(background=bg_color, foreground=fg_color, activebackground=active_bg, activeforeground=active_fg, \
-    disabledforeground=dis_fg, font=AppleGaramond11, borderwidth=1, activeborderwidth=0)
+    disabledforeground=dis_fg, borderwidth=1, activeborderwidth=0)
 
 memory_menu.add_command(label="M+", command=mem_plus)
 memory_menu.add_command(label="M-", command=mem_minus)
@@ -207,7 +196,7 @@ menubar.add_cascade(label="Memory", menu=memory_menu)
 
 help_menu = t.Menu(menubar, tearoff=0)
 help_menu.configure(background=bg_color, foreground=fg_color, activebackground=active_bg, activeforeground=active_fg,
-    disabledforeground=dis_fg, font=AppleGaramond11, borderwidth=1, activeborderwidth=0)
+    disabledforeground=dis_fg,  borderwidth=1, activeborderwidth=0)
 
 help_menu.add_command(label='Version', command=ver)
 help_menu.add_command(label='Key Map', command=keyMapWin)

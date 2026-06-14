@@ -1,0 +1,3 @@
+pyinstaller
+pyglet
+ttkthemes
