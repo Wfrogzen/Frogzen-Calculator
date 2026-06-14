@@ -1,12 +1,16 @@
+import os
+import sys
+from platform import system
+# This environment flag MUST be set before pyglet is imported
+if system() == "Linux":
+    os.environ["PYGLET_HEADLESS"] = "1"
+import pyglet as pglt
 import tkinter as t
 from tkinter import ttk
 from tkinter import messagebox as tmb
 import tkinter.font as tfont
 import ttkthemes as ttkt
 from math import sqrt
-import pyglet as pglt
-from platform import system
-import os
 from sys import version_info
 
 # defines the current software version (need to be constantly changed every time version number changes)
