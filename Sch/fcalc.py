@@ -13,7 +13,7 @@ from sys import version_info
 verMajor = 1
 verMinor = 2
 verPatch = 0
-verAttr = "Beta1"
+verAttr = ""
 
 sqrt(1)
 
@@ -111,7 +111,7 @@ def ver():
     verWin.geometry('320x260')
     
     verlabel = ttk.Label(verWin)
-    verlabel.config(text=f'V{verMajor}.{verMinor}.{verPatch}-{verAttr}(简体中文)', image=logo, compound='top')
+    verlabel.config(text=f'V{verMajor}.{verMinor}.{verPatch}{verAttr}(简体中文)', image=logo, compound='top')
     verlabel.place(anchor='center', x=160, y=100)
 
     pyverlabel = ttk.Label(verWin)

@@ -110,7 +110,7 @@ def ver():
     verWin.geometry('320x260')
     
     verlabel = ttk.Label(verWin)
-    verlabel.config(text=f'V{verMajor}.{verMinor}.{verPatch}-{verAttr}(繁體中文)', image=logo, compound='top')
+    verlabel.config(text=f'V{verMajor}.{verMinor}.{verPatch}{verAttr}(繁體中文)', image=logo, compound='top')
     verlabel.place(anchor='center', x=160, y=100)
 
     pyverlabel = ttk.Label(verWin)
